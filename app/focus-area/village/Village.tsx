@@ -43,7 +43,7 @@ const VillageAdoptionPage = () => {
     <>
       {/* Banner */}
       <ReuseBanner
-        image="/images/gallery/gramasabha/gramasabha-15.webp"
+        image="/images/gallery/gramasabha/gramasabha-7.webp"
         title="Focus Area - Village Adoption"
         subtitle="Where Responsibility Meets Community"
       />

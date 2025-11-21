@@ -58,7 +58,7 @@ export default function AlumniPage() {
   return (
     <div>
       <ReuseBanner
-        image="https://img.freepik.com/premium-photo/business-handshake-partners_160672-4152.jpg"
+        image="https://www.sonabusinessschool.com/images/banner/program-banners/admission.webp"
         title=" Pratner With Us - Alumni"
         subtitle="Reconnect, Mentor, Volunteer"
       />

@@ -41,7 +41,7 @@ const EnvironmentPage = () => {
     <>
       {/* Banner */}
       <ReuseBanner
-        image="/images/gallery/environment/environment-19.webp"
+        image="/images/gallery/environment/environment-12.webp"
         title="Focus Area - Environment & Sustainability"
         subtitle="Where Responsibility Meets Community"
       />

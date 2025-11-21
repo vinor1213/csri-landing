@@ -1,7 +1,7 @@
 export const programCategories = [
   {
     title: "Skill Development Training",
-    slug: "skill-development-training",
+    slug: "/focus-area/skill",
     desc: "Tailoring, Data Entry, Front Office, CCTV Supervision, Retail Management, Rural Enterprise Development",
     image:
       "/images/programs/Program-Skill-Development.webp",

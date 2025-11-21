@@ -84,7 +84,7 @@ const HealthPage = () => {
     <>
       {/* Banner */}
       <ReuseBanner
-        image="/images/gallery/health/health1-13.webp"
+        image="/images/gallery/health/health1-18.webp"
         title="Focus Area - Health & Well-being"
         subtitle="Where Responsibility Meets Community"
       />

@@ -38,7 +38,7 @@ export default function WhyPartnerPages() {
   return (
     <div>
       <ReuseBanner
-        image="https://img.freepik.com/premium-photo/business-handshake-partners_160672-4152.jpg"
+        image="https://img.freepik.com/premium-photo/community-care_895622-720.jpg?ga=GA1.1.1091201869.1763632617&semt=ais_hybrid&w=740&q=80"
         title=" Pratner With Us - Why Partner"
         subtitle="Collaborating for a Sustainable Future"
       />

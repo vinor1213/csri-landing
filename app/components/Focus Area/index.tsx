@@ -101,7 +101,7 @@ export default function CSRIFocusPage() {
                 viewport={{ amount: 0.2, once: true }}
                 className="bg-white shadow-lg hover:shadow-xl transition-shadow duration-500 flex flex-col overflow-hidden"
               >
-     
+
                 <div className="w-full h-48 overflow-hidden">
                   <img
                     src={program.image}
@@ -111,16 +111,16 @@ export default function CSRIFocusPage() {
                 </div>
 
                 <div className="p-5 flex flex-col flex-1">
-       
+
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-lg sm:text-xl font-semibold text-gray-700">
                       {program.title}
                     </h3>
 
                     <button
-                      onClick={() =>
-                        router.push(`/programs?category=${program.slug}`)
-                      }
+                      // onClick={() =>
+                      //   router.push(`/programs?category=${program.slug}`)
+                      // }
                       className="hover:bg-blue-500 group relative inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-blue-600 font-medium text-neutral-200"
                     >
                       <div className="translate-x-0 transition group-hover:translate-x-[300%]">
@@ -164,7 +164,7 @@ export default function CSRIFocusPage() {
             ))}
           </div>
 
-       
+          {/* 
           <div className="flex justify-center mt-8">
             <button
               onClick={() => router.push("/programs")}
@@ -189,10 +189,10 @@ export default function CSRIFocusPage() {
                 </svg>
               </div>
             </button>
-          </div>
+          </div> */}
         </div>
 
-  
+
         <div id="focus" className="mt-12 text-center">
           <motion.h2
             variants={scrollVariant}

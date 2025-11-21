@@ -8,12 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import ReuseBanner from "../components/ReuseBanner";
 import Breadcrumb from "../components/Breadcrumb";
-import {
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaLinkedinIn,
-} from "react-icons/fa";
+
 
 
 type Profile = {

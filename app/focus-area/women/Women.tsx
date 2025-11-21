@@ -29,7 +29,7 @@ const WomenEmpowermentPage = () => {
     <>
       {/* Banner */}
       <ReuseBanner
-        image="/images/gallery/fashion-apparels/fashion-apparels-10.webp"
+        image="/images/gallery/fashion-apparels/fashion-apparels-23.webp"
         title="Focus Area - women Empowerment Initiatives"
         subtitle="Where Responsibility Meets Community"
       />
