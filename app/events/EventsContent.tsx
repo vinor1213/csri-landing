@@ -1,201 +1,304 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import ReuseBanner from "../components/ReuseBanner";
 import Breadcrumb from "../components/Breadcrumb";
-interface EventType {
-    title: string;
-    startDate: string;
-    endDate: string;
-    description: string;
-    imgSrc: string;
-    category: string;
-}
-
-const eventsData: Record<string, EventType[]> = {
-    upcoming: [
-        {
-            title: "Health Awareness Camp",
-            startDate: "2025-10-15",
-            endDate: "2025-10-16",
-            description: "A community camp focused on preventive health and wellness.",
-            imgSrc: "https://img.freepik.com/free-photo/using-hand-sanitizer-while-traveling-new-normal_53876-101238.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-            category: "Technology",
-        },
-        {
-            title: "Tree Plantation Drive",
-            startDate: "2025-11-05",
-            endDate: "2025-11-05",
-            description: "Join us to plant trees and promote environmental awareness.",
-            imgSrc: "https://img.freepik.com/free-photo/close-up-picture-pot-plant-money-put-hand_1150-26646.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-            category: "Gadgets",
-        },
-        {
-            title: "Tree Plantation Drive",
-            startDate: "2025-11-05",
-            endDate: "2025-11-05",
-            description: "Join us to plant trees and promote environmental awareness.",
-            imgSrc: "https://img.freepik.com/free-photo/close-up-picture-pot-plant-money-put-hand_1150-26646.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-            category: "Gadgets",
-        },
-        {
-            title: "Tree Plantation Drive",
-            startDate: "2025-11-05",
-            endDate: "2025-11-05",
-            description: "Join us to plant trees and promote environmental awareness.",
-            imgSrc: "https://img.freepik.com/free-photo/close-up-picture-pot-plant-money-put-hand_1150-26646.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-            category: "Gadgets",
-        },
+import { newsandeventsData } from "@/data/newsandevents";
 
 
-    ],
-    present: [
-        {
-            title: "CSR Program Workshop",
-            startDate: "2025-09-12",
-            endDate: "2025-09-14",
-            description: "Ongoing workshop on skill development for youth.",
-            imgSrc: "/images/events/present1.jpg",
-            category: "Insights",
-        },
-    ],
-    past: [
-        {
-            title: "Education Support Camp",
-            startDate: "2025-07-20",
-            endDate: "2025-07-21",
-            description: "Completed camp for underprivileged students in rural areas.",
-            imgSrc: "/images/events/past1.jpg",
-            category: "Bitcoin",
-        },
-        {
-            title: "River Cleanup Drive",
-            startDate: "2025-06-15",
-            endDate: "2025-06-15",
-            description: "A successful drive cleaning local rivers and raising awareness.",
-            imgSrc: "/images/events/past2.jpg",
-            category: "Cryptocurrency",
-        },
-    ],
-};
 
-const eventTabs = ["upcoming", "present", "past"];
+const eventTabs = [
+    { key: "upcoming", label: "Upcoming" },
+    { key: "News", label: "News" },
+    { key: "past", label: "Past" },
+];
 
 const EventsPage = () => {
     const [activeTab, setActiveTab] = useState("upcoming");
+    const [search, setSearch] = useState("");
+    const [startDateFilter, setStartDateFilter] = useState("");
+    const [endDateFilter, setEndDateFilter] = useState("");
+    const filteredEvents = useMemo(() => {
+        return newsandeventsData[activeTab].filter((event) => {
+            const matchText =
+                event.title.toLowerCase().includes(search.toLowerCase()) ||
+                event.category.toLowerCase().includes(search.toLowerCase()) ||
+                event.description.toLowerCase().includes(search.toLowerCase());
+
+            const matchStartDate =
+                !startDateFilter || (event.startDate && new Date(event.startDate) >= new Date(startDateFilter));
+
+            const matchEndDate =
+                !endDateFilter || (event.endDate && new Date(event.endDate) <= new Date(endDateFilter));
+
+
+            return matchText && matchStartDate && matchEndDate;
+        });
+    }, [activeTab, search, startDateFilter, endDateFilter]);
+
+    const [page, setPage] = useState(1);
+    const itemsPerPage = 3;
+
+    const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
+
+    const paginatedEvents = filteredEvents.slice(
+        (page - 1) * itemsPerPage,
+        page * itemsPerPage
+    );
 
     return (
-
         <>
             <ReuseBanner
-                image="https://img.freepik.com/premium-photo/world-population-day-poster_944525-9568.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_incoming&w=740&q=80"
-                title="Events"
-                subtitle=" Connecting Communities Through Meaningful Experiences"
+                image="/images/banner/events-banner.jpg"
+                title=" News & Events"
+                subtitle="Connecting Communities Through Meaningful Experiences"
             />
 
-            <Breadcrumb
-                items={[
-                    { label: "Home", href: "/" },
-                    { label: "Events", href: "/events" },
-                    { label: "" },
-                ]}
-            />
+            <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Events" }]} />
+            <section className="py-14 bg-gray-50 min-h-screen">
+                <div className="max-w-7xl mx-auto px-4">
 
-            <section className="py-16 bg-gray-50 dark:bg-gray-900 dark:text-gray-100 min-h-screen">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                 
-
-                    {/* Tabs */}
-                    <div className="flex justify-center mb-12 space-x-4">
+                    {/* TABS */}
+                    <div className="flex justify-center mb-8 flex-wrap gap-3">
                         {eventTabs.map((tab) => (
                             <button
-                                key={tab}
-                                className={`px-6 py-2 rounded-lg font-semibold transition ${activeTab === tab
+                                key={tab.key}
+                                onClick={() => setActiveTab(tab.key)}
+                                className={`px-6 py-2 rounded-lg font-semibold transition ${activeTab === tab.key
                                     ? "bg-blue-600 text-white shadow-lg"
-                                    : "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-blue-500 hover:text-white"
+                                    : "bg-gray-200 hover:bg-blue-500 hover:text-white"
                                     }`}
-                                onClick={() => setActiveTab(tab)}
                             >
-                                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+                                {tab.label}
                             </button>
                         ))}
                     </div>
 
-                    {/* Events Layout */}
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={activeTab}
-                            className="grid grid-cols-1 lg:grid-cols-3 gap-8"
-                            initial={{ opacity: 0, y: 30 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -30 }}
-                            transition={{ duration: 0.5 }}
-                        >
-                            {/* Main Left Card */}
-                            {eventsData[activeTab][0] && (
-                                <motion.div
-                                    className="lg:col-span-2 bg-white dark:bg-gray-800 rounded-xl  overflow-hidden flex flex-col"
-                                    whileHover={{ scale: 1.02 }}
-                                >
-                                    <div className="relative">
-                                        <Image
-                                            src={eventsData[activeTab][0].imgSrc}
-                                            alt={eventsData[activeTab][0].title}
-                                            width={800}
-                                            height={400}
-                                            className="object-cover w-full h-72"
-                                        />
-                                    </div>
-                                    <div className="p-6 flex flex-col flex-1">
-                                        <p className="text-blue-500 text-sm font-semibold mb-2">
-                                            {eventsData[activeTab][0].category}
-                                        </p>
-                                        <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 dark:text-white mb-4">
-                                            {eventsData[activeTab][0].title}
-                                        </h3>
-                                        <p className="text-gray-700 dark:text-gray-300 flex-1">
-                                            {eventsData[activeTab][0].description}
-                                        </p>
-                                        <button className="mt-6 self-start bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
-                                            Read more
+                    {/* FILTERS */}
+                    <div className="mb-8 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+
+                        {/* Search */}
+                        <input
+                            type="text"
+                            placeholder="Search events..."
+                            value={search}
+                            onChange={(e) => {
+                                setPage(1);
+                                setSearch(e.target.value);
+                            }}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white 
+                focus:ring-2 focus:ring-blue-500 outline-none"
+                        />
+
+                        {/* Start Date */}
+                        <input
+                            type="text"
+                            placeholder="Start Date"
+                            onFocus={(e) => (e.target.type = "date")}
+                            onBlur={(e) => (e.target.type = e.target.value ? "date" : "text")}
+                            value={startDateFilter}
+                            onChange={(e) => {
+                                setPage(1);
+                                setStartDateFilter(e.target.value);
+                            }}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white 
+                focus:ring-2 focus:ring-blue-500 outline-none"
+                        />
+
+                        {/* End Date */}
+                        <input
+                            type="text"
+                            placeholder="End Date"
+                            onFocus={(e) => (e.target.type = "date")}
+                            onBlur={(e) => (e.target.type = e.target.value ? "date" : "text")}
+                            value={endDateFilter}
+                            onChange={(e) => {
+                                setPage(1);
+                                setEndDateFilter(e.target.value);
+                            }}
+                            className="w-full px-4 py-2 rounded-lg border border-gray-300 bg-white 
+                focus:ring-2 focus:ring-blue-500 outline-none"
+                        />
+
+                    </div>
+
+                    {/* MAIN GRID */}
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+                        {/* LEFT SIDE – LIST VIEW */}
+                        <div className="lg:col-span-9">
+                            <div className="bg-white  shadow-md p-4 flex flex-col h-auto">
+
+                                {/* EVENTS LIST */}
+                                <div className="flex-1 overflow-hidden">
+                                    <AnimatePresence>
+                                        <motion.div
+                                            key={activeTab + page}
+                                            initial={{ opacity: 0, y: 20 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            transition={{ duration: 0.4 }}
+                                            className="flex flex-col gap-6 h-full overflow-hidden"
+                                        >
+                                            {paginatedEvents.map((event, index) => (
+                                                <motion.div
+                                                    key={index}
+                                                    whileHover={{ scale: 1.01 }}
+                                                    className="flex items-start gap-5 border-b pb-5"
+                                                >
+                                                    {/* IMAGE → Slightly Bigger */}
+                                                    <a href={`/events/${event.slug}`} className="block">
+
+                                                        <Image
+                                                            src={event.imgSrc}
+                                                            alt={event.title}
+                                                            width={250}
+                                                            height={150}
+                                                            className="w-44 h-28 object-cover rounded-lg"
+                                                        />
+                                                    </a>
+
+
+                                                    {/* TEXT DETAILS */}
+                                                    <div className="flex flex-col flex-1">
+                                                        <p className="text-blue-600 font-semibold text-xs sm:text-sm">
+                                                            {event.category}
+                                                        </p>
+
+                                                        <a href={`/events/${event.slug}`} className="block">
+                                                            <h3 className="text-lg font-bold">{event.title}</h3>
+                                                        </a>
+
+                                                        <p className="text-gray-600 text-sm line-clamp-3">
+                                                            {event.description}
+                                                        </p>
+
+                                                        <p className="text-xs text-gray-500 mt-2">
+                                                            {event.startDate} → {event.endDate}
+                                                        </p>
+                                                    </div>
+                                                </motion.div>
+                                            ))}
+                                        </motion.div>
+                                    </AnimatePresence>
+                                </div>
+
+                                {/* PAGINATION */}
+                                {totalPages > 1 && (
+                                    <div className="flex justify-center gap-3 mt-4">
+                                        <button
+                                            onClick={() => setPage((p) => Math.max(p - 1, 1))}
+                                            disabled={page === 1}
+                                            className={`px-4 py-2 rounded-lg border ${page === 1
+                                                ? "opacity-40 cursor-not-allowed"
+                                                : "hover:bg-blue-100"
+                                                }`}
+                                        >
+                                            Prev
+                                        </button>
+
+                                        <div className="flex gap-2">
+                                            {Array.from({ length: totalPages }, (_, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => setPage(i + 1)}
+                                                    className={`px-3 py-2 rounded-lg ${page === i + 1
+                                                        ? "bg-blue-600 text-white"
+                                                        : "bg-gray-200 hover:bg-blue-500 hover:text-white"
+                                                        }`}
+                                                >
+                                                    {i + 1}
+                                                </button>
+                                            ))}
+                                        </div>
+
+                                        <button
+                                            onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+                                            disabled={page === totalPages}
+                                            className={`px-4 py-2 rounded-lg border ${page === totalPages
+                                                ? "opacity-40 cursor-not-allowed"
+                                                : "hover:bg-blue-100"
+                                                }`}
+                                        >
+                                            Next
                                         </button>
                                     </div>
-                                </motion.div>
-                            )}
-
-                            {/* Right Smaller Cards */}
-                            <div className="flex flex-col gap-6">
-                                {eventsData[activeTab].slice(1).map((event, idx) => (
-                                    <motion.div
-                                        key={idx}
-                                        className="bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden flex"
-                                        whileHover={{ scale: 1.02 }}
-                                    >
-                                        <Image
-                                            src={event.imgSrc}
-                                            alt={event.title}
-                                            width={120}
-                                            height={120}
-                                            className="object-cover w-32 h-28 sm:h-32"
-                                        />
-                                        <div className="p-4 flex flex-col justify-center">
-                                            <p className="text-blue-600 text-xs font-semibold mb-1">{event.category}</p>
-                                            <h4 className="text-md font-semibold text-gray-900 dark:text-white">
-                                                {event.title}
-                                            </h4>
-                                            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                                                {event.description}
-                                            </p>
-                                        </div>
-                                    </motion.div>
-                                ))}
+                                )}
                             </div>
-                        </motion.div>
-                    </AnimatePresence>
+                        </div>
+
+                        {/* RIGHT SIDE – SCROLL ONLY */}
+                        <div className="lg:col-span-3">
+                            <div className="bg-white shadow-md p-5 h-[58vh] flex flex-col overflow-hidden">
+
+                                {/* HEADER WITH BOTTOM BORDER */}
+                                <div className="pb-3 border-b">
+                                    <h2 className="text-xl font-bold text-center">
+                                        {activeTab === "News" ? "Latest News" : activeTab + " List"}
+                                    </h2>
+                                </div>
+
+                                {/* SCROLL LIST */}
+                                <div className="mt-3 flex-1 overflow-y-auto">
+                                    <div className="space-y-4">
+                                        {filteredEvents.map((event, idx) => (
+                                            <a    key={event.slug}  href={`/events/${event.slug}`} className="block">
+
+                                                <div
+                                                    key={idx}
+                                                    className="p-3 border rounded-lg hover:bg-blue-50 cursor-pointer transition flex items-center gap-3"
+                                                >
+                                                    {/* Thumbnail */}
+
+                                                    <Image
+                                                        src={event.imgSrc}
+                                                        alt={event.title}
+                                                        width={50}
+                                                        height={40}
+                                                        className="w-14 h-10 object-cover rounded-md"
+                                                    />
+
+                                                    {/* Text */}
+                                                    <div className="flex flex-col">
+                                                        <p className="text-sm font-semibold text-blue-600">
+                                                            {event.category}
+                                                        </p>
+                                                        <h4 className="text-sm font-semibold line-clamp-1">{event.title}</h4>
+                                                        <p className="text-xs text-gray-500">
+                                                            {event.startDate} → {event.endDate}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </a>
+
+                                        ))}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
                 </div>
             </section>
+
+
+
+
+
+            {/* SCROLLBAR STYLE */}
+            <style>{`
+                .custom-scrollbar::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background: #a0aec0;
+                    border-radius: 10px;
+                }
+            `}</style>
         </>
     );
 };

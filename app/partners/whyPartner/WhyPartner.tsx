@@ -46,7 +46,7 @@ export default function WhyPartnerPages() {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Partners", href: "/partners" },
+          { label: "Partners", href: "/partners/whyPartner" },
           { label: "Why Partner" },
         ]}
       />
@@ -237,7 +237,7 @@ export default function WhyPartnerPages() {
         pr-4 md:pr-6
         pl-2
         py-2 
-        bg-gradient-to-r from-gray-300 to-gray-500
+        bg-gradient-to-r from-blue-600 to-blue-500
         text-white font-semibold
         shadow-md
         hover:shadow-lg
@@ -264,19 +264,20 @@ export default function WhyPartnerPages() {
                         stroke="currentColor"
                         strokeWidth="2.2"
                         viewBox="0 0 24 24"
-                        className="w-4 h-4 md:w-5 md:h-5 text-orange-600"
+                        className="w-4 h-4 md:w-5 md:h-5 text-blue-600"
                       >
                         <path strokeLinecap="round" strokeLinejoin="round" d="M15 6l-6 6 6 6" />
                       </svg>
                     </div>
 
                     {/* TEXT */}
-                    <span className="ml-3 tracking-wide text-lg md:text-xl italic">
+                    <span className="ml-3 tracking-wide text-lg md:text-xl relative italic">
                       Let’s Build Impact That Lasts
                     </span>
                   </button>
                 </Link>
               </motion.div>
+
 
 
 

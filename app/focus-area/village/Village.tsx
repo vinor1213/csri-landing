@@ -52,7 +52,7 @@ const VillageAdoptionPage = () => {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Focus Area", href: "/focusarea" },
+          { label: "Focus Area", href: "/focus-area/village" },
           { label: content.label, href: "" },
         ]}
       />

@@ -5,6 +5,8 @@ import PopupNotice from "./components/Popup";
 import type { Metadata } from "next";
 import Script from "next/script";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const metadata: Metadata = {
   title: {
     default: "Sona CSRI – Center for Social Responsibility Initiatives",
@@ -108,8 +110,15 @@ export default function RootLayout({
 
       <body className="bg-white text-gray-900 dark:bg-gray-950 dark:text-gray-100">
         <Navbar />
-        <PopupNotice />
+
         {children}
+        <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={true}
+          theme="colored"
+        />
         <Footer />
       </body>
     </html>

@@ -32,7 +32,7 @@ type Profile = {
 const aboutSections = [
   {
     content: `Sona College of Technology’s strength lies in its holistic approach to education—seamlessly blending knowledge creation, skill development, and value-based learning. The institution’s <strong>23 Research & Development</strong>  Centres are not just hubs of scientific inquiry, but also platforms where students, faculty, and industry collaborate to generate impactful solutions. These centres cover diverse domains such as Artificial Intelligence, <strong>Data Science, Robotics, Nano Materials, Biomedical Engineering, and Green Technologies,</strong> ensuring that students are exposed to the frontiers of global innovation`,
-    image: "https://lh3.googleusercontent.com/p/AF1QipPo3gZK0GE_SqbTeCBolT7ehMGbMm0nabwsbVlt=s680-w680-h510-rw",
+    image: "/images/aboutus/about-us-main.jpeg",
   },
   {
     content: `In line with India’s national vision for self-reliance and sustainability, Sona has been at the forefront of fostering research that addresses real-world challenges. Its pioneering initiatives in renewable energy harness solar, wind, and bio-based solutions, while its smart manufacturing projects integrate Industry 4.0 practices with traditional industries to enhance productivity and sustainability. Healthcare innovations emerging from Sona’s ecosystem have addressed affordability and accessibility, particularly for rural populations.`,
@@ -184,7 +184,7 @@ const tabs = [
 
 const tabContents: any = {
   vision: {
-    image: "https://img.freepik.com/premium-photo/inspiring-collage-university-students-headshots-arranged-spiral-formation-against-back_997534-27461.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
+    image: "/images/about/vission.png",
     content: `	Empower youth and women through education, skills, and sustainable livelihoods in collaboration with corporates, government, and communities.
 Build a Skill & Livelihood Hub with expert-led, multi-sectoral training
  	Lead community-driven, tech-enabled development via CSR & donor initiatives.`,
@@ -214,7 +214,7 @@ const AboutUssection = () => {
   return (
     <>
       <ReuseBanner
-        image="https://img.freepik.com/premium-photo/abstract-image-business-people-silhouette-glass-window_53876-138392.jpg"
+        image="/images/banner/about-us.webp"
         title={`About Us${activeTabData && activeTabData.label !== "About Us"
           ? ` - ${activeTabData.label}`
           : ""

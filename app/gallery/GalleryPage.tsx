@@ -361,7 +361,7 @@ const ProjectsSection = () => {
   return (
     <>
       <ReuseBanner
-        image="https://img.freepik.com/free-vector/white-frames-collage-sunlight-brick-wall_107791-17870.jpg"
+        image="/images/gallery/others/photo-collage.jpg"
         title=" Gallery"
         subtitle="A Visual Journey Through Our Work"
       />

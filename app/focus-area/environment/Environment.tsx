@@ -50,7 +50,7 @@ const EnvironmentPage = () => {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Focus Area", href: "/focusarea" },
+          { label: "Focus Area", href: "/focus-area/environment" },
           { label: content.label, href: "" },
         ]}
       />

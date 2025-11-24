@@ -38,7 +38,7 @@ const WomenEmpowermentPage = () => {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Focus Area", href: "/focusarea" },
+          { label: "Focus Area", href: "/focus-area/women" },
           { label: content.label, href: "" },
         ]}
       />

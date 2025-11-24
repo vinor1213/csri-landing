@@ -51,11 +51,11 @@ const navigation: NavigationItem[] = [
     {
         name: "Reports",
         href: "/reports",
-        subItems: [
-            { name: "Newsletter", href: "/reports" },
-            { name: "Annual Report", href: "/reports" },
-            { name: "Program Report", href: "/reports" },
-        ],
+        // subItems: [
+        //     { name: "Newsletter", href: "/reports" },
+        //     { name: "Annual Report", href: "/reports" },
+        //     { name: "Program Report", href: "/reports" },
+        // ],
     },
 ];
 

@@ -61,7 +61,7 @@ export default class MultipleItems extends Component {
     };
 
     return (
-      <div className="bg-gray-100 py-12">
+      <div id="ongoing" className="bg-gray-100 py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           {/* Heading */}
           <div className="text-center pb-8">

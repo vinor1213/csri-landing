@@ -7,10 +7,12 @@ import Breadcrumb from "@/app/components/Breadcrumb";
 import { HeartPulse } from "lucide-react";
 import { MdStar } from "react-icons/md";
 import Image from "next/image";
-import Notiflix from "notiflix";
+import { postData } from "@/app/lib/api";
+import { toast } from "react-toastify";
 
 const HealthPage = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
     organization: "",
@@ -29,43 +31,71 @@ const HealthPage = () => {
   };
 
   const validateEmail = (email: any) => /\S+@\S+\.\S+/.test(email);
-  const validatePhone = (phone: any) => /^\d{10,15}$/.test(phone.replace(/\D/g, ""));
+  const validatePhone = (phone: any) =>
+    /^\d{10,15}$/.test(phone.replace(/\D/g, ""));
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: any) => {
     e.preventDefault();
 
     const { fullName, email, phone, supportType } = formData;
 
+    // 🔥 VALIDATION
     if (!fullName || !email || !phone || !supportType) {
-      Notiflix.Notify.failure("Please fill all required fields.");
+      toast.error("Please fill all required fields.", { theme: "colored" });
       return;
     }
 
     if (!validateEmail(email)) {
-      Notiflix.Notify.failure("Please enter a valid email.");
+      toast.error("Please enter a valid email.", { theme: "colored" });
       return;
     }
 
     if (!validatePhone(phone)) {
-      Notiflix.Notify.failure("Please enter a valid phone number (10-15 digits).");
+      toast.error("Please enter a valid phone number (10-15 digits).", {
+        theme: "colored",
+      });
       return;
     }
 
-    // Success
-    console.log("Form Submitted:", formData);
-    Notiflix.Notify.success("Enquiry submitted successfully!");
-    setFormData({
-      fullName: "",
-      organization: "",
-      email: "",
-      phone: "",
-      supportType: "",
-      location: "",
-      reason: "",
-      disease: "",
-      message: "",
+    setLoading(true);
+
+    // Create formData for API
+    const payload = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      payload.append(key, value as string);
     });
-    setIsOpen(false);
+
+    try {
+      // Endpoint = healthcamps
+      const res = await postData("healthcamps", payload);
+
+      if (res.success) {
+        toast.success("Enquiry submitted successfully!", {
+          theme: "colored",
+        });
+
+        // Reset form
+        setFormData({
+          fullName: "",
+          organization: "",
+          email: "",
+          phone: "",
+          supportType: "",
+          location: "",
+          reason: "",
+          disease: "",
+          message: "",
+        });
+
+        setIsOpen(false);
+      } else {
+        toast.error("Something went wrong!", { theme: "colored" });
+      }
+    } catch (error) {
+      toast.error("Server Error!", { theme: "colored" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const content = {
@@ -93,7 +123,7 @@ const HealthPage = () => {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Focus Area", href: "/focusarea" },
+          { label: "Focus Area", href: "/focus-area/health" },
           { label: content.label, href: "" },
         ]}
       />
@@ -101,12 +131,21 @@ const HealthPage = () => {
       {/* Intro Section */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-stretch px-6">
-
           {/* Left: Content */}
           <div className="space-y-6 text-gray-700 h-full flex flex-col">
-
             <p className="leading-relaxed text-justify">
-              We promote preventive healthcare, rejuvenation, and health literacy by facilitating access to quality services through health camps, awareness drives, and capacity-building programs—building on our long-standing engagement in underserved areas. These efforts are further strengthened by the expertise and support of Sona Medical College of Naturopathy and Yoga, enabling us to deliver holistic wellness interventions such as medical camps, menstrual hygiene workshops, natural therapies, and yoga-based community health initiatives. We strengthen community health through preventive care, awareness, and access to wellness resources, blending modern healthcare with traditional practices. </p>
+              We promote preventive healthcare, rejuvenation, and health
+              literacy by facilitating access to quality services through health
+              camps, awareness drives, and capacity-building programs—building
+              on our long-standing engagement in underserved areas. These
+              efforts are further strengthened by the expertise and support of
+              Sona Medical College of Naturopathy and Yoga, enabling us to
+              deliver holistic wellness interventions such as medical camps,
+              menstrual hygiene workshops, natural therapies, and yoga-based
+              community health initiatives. We strengthen community health
+              through preventive care, awareness, and access to wellness
+              resources, blending modern healthcare with traditional practices.{" "}
+            </p>
 
             <div className="space-y-3">
               {content.features.map((feature, i) => {
@@ -115,15 +154,13 @@ const HealthPage = () => {
                   <div key={i} className="flex items-start gap-3">
                     <MdStar className="mt-1 text-blue-500/70  flex-shrink-0 w-6 h-6" />
                     <p className="leading-relaxed">
-                      <span className="font-bold">{title}:</span> {desc.join(":")}
+                      <span className="font-bold">{title}:</span>{" "}
+                      {desc.join(":")}
                     </p>
                   </div>
                 );
               })}
             </div>
-
-
-
 
             <button
               onClick={() => setIsOpen(true)}
@@ -132,23 +169,42 @@ const HealthPage = () => {
               aria-label="Support a health camp"
             >
               {/* Icon */}
-              <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" className="flex-shrink-0">
-                <path d="M12 2v20M2 12h20" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <svg
+                aria-hidden="true"
+                focusable="false"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                className="flex-shrink-0"
+              >
+                <path
+                  d="M12 2v20M2 12h20"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
               </svg>
 
-              <span className="relative">{content.ctaText || 'SUPPORT A HEALTH CAMP'}</span>
+              <span className="relative">
+                {content.ctaText || "SUPPORT A HEALTH CAMP"}
+              </span>
 
               <div className="animate-shine-infinite absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full justify-center blur-[12px]">
                 <div className="relative h-full w-8 bg-white/30" />
               </div>
             </button>
-
-
           </div>
 
           {/* Right: Image */}
           <div className="w-full h-full min-h-[350px] md:min_h-[450px] relative overflow-hidden shadow-md">
-            <Image src={content.image} alt={content.label} fill className="object-cover" />
+            <Image
+              src={content.image}
+              alt={content.label}
+              fill
+              className="object-cover"
+            />
           </div>
         </div>
       </section>
@@ -182,12 +238,22 @@ const HealthPage = () => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <div className="flex justify-end items-center mb-4">
-                  <button onClick={() => setIsOpen(false)} className="text-gray-500 hover:text-gray-800 font-bold">X</button>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="text-gray-500 hover:text-gray-800 font-bold"
+                  >
+                    X
+                  </button>
                 </div>
                 <p className="mb-4 text-gray-600">
-                  Bring quality healthcare to underserved communities. Join hands with us to organize or sponsor a medical camp and make a lasting impact.
+                  Bring quality healthcare to underserved communities. Join
+                  hands with us to organize or sponsor a medical camp and make a
+                  lasting impact.
                 </p>
-                <form className="grid grid-cols-1 gap-4" onSubmit={handleSubmit}>
+                <form
+                  className="grid grid-cols-1 gap-4"
+                  onSubmit={handleSubmit}
+                >
                   <input
                     type="text"
                     name="fullName"
@@ -268,9 +334,10 @@ const HealthPage = () => {
                   ></textarea>
                   <button
                     type="submit"
+                    disabled={loading}
                     className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all duration-300 w-full"
                   >
-                    Enquire Now
+                    {loading ? "Loading..." : "Enquire Now"}
                   </button>
                 </form>
               </motion.div>

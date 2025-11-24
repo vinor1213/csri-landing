@@ -2,12 +2,13 @@
 
 import { Mail, Phone, MapPin } from "lucide-react";
 import { useState, useEffect } from "react";
-
+import { postData } from "@/app/lib/api";
+import { toast } from "react-toastify";
 const ContactSection = () => {
   const [captcha, setCaptcha] = useState("");
   const [userCaptcha, setUserCaptcha] = useState("");
   const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(false);
   // Generate new captcha
   const generateCaptcha = () => {
     const chars = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
@@ -22,10 +23,13 @@ const ContactSection = () => {
     generateCaptcha();
   }, []);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // CAPTCHA validation (frontend only)
+    // Store form reference BEFORE async wait
+    const form = e.currentTarget;
+
+    // CAPTCHA validation
     if (userCaptcha.trim().toUpperCase() !== captcha) {
       setError("❌ Invalid CAPTCHA. Please try again.");
       generateCaptcha();
@@ -33,7 +37,31 @@ const ContactSection = () => {
     }
 
     setError("");
-    alert("✅ Message Sent Successfully!");
+    setLoading(true);
+
+    const formData = new FormData(form);
+
+    try {
+      const res = await postData("contactrequest", formData);
+
+      if (res.success === true) {
+        toast.success("Message Sent Successfully! ", {
+          theme: "colored",
+        });
+
+        // SAFE RESET
+        form.reset();
+        setUserCaptcha("");
+        setError("");
+        generateCaptcha();
+      } else {
+        toast.error("Something went wrong!", { theme: "colored" });
+      }
+    } catch (error) {
+      toast.error("Server Error!", { theme: "colored" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -71,13 +99,14 @@ const ContactSection = () => {
                   href="mailto:sonacsri@sonatech.ac.in"
                   className="hover:text-blue-700"
                 >
-                 sonacsri@sonatech.ac.in
+                  sonacsri@sonatech.ac.in
                 </a>
               </div>
 
               <div className="flex items-center gap-3">
                 <MapPin className="text-blue-600" />
-                Sona College of Technology, Junction Main Road, Salem, Tamil Nadu – 636005
+                Sona College of Technology, Junction Main Road, Salem, Tamil
+                Nadu – 636005
               </div>
 
               <div className="w-full h-full rounded-lg overflow-hidden shadow-md">
@@ -95,9 +124,13 @@ const ContactSection = () => {
           </div>
 
           {/* Contact Form */}
-          <form onSubmit={handleSubmit} className="space-y-4 flex flex-col h-full">
+          <form
+            onSubmit={handleSubmit}
+            className="space-y-4 flex flex-col h-full"
+          >
             <input
               type="text"
+              name="name"
               required
               placeholder="Your name"
               className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
@@ -105,12 +138,14 @@ const ContactSection = () => {
 
             <input
               type="email"
+              name="email"
               required
               placeholder="Email address"
               className="w-full border border-gray-300 rounded-lg p-3 focus:ring-2 focus:ring-blue-500 outline-none"
             />
 
             <textarea
+              name="message"
               required
               rows={4}
               placeholder="Message"
@@ -147,9 +182,16 @@ const ContactSection = () => {
             {/* Submit */}
             <button
               type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-md font-semibold transition shadow-md mt-auto"
+              disabled={loading}
+              className={`w-full py-3 rounded-md font-semibold transition shadow-md mt-auto text-white 
+    ${
+      loading
+        ? "bg-blue-400 cursor-not-allowed"
+        : "bg-blue-600 hover:bg-blue-700"
+    }
+  `}
             >
-              SEND MESSAGE
+              {loading ? "Sending..." : "SEND MESSAGE"}
             </button>
           </form>
         </div>

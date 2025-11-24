@@ -6,19 +6,36 @@ import { MdStar } from "react-icons/md";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-
+import { postData } from "@/app/lib/api";
+import { toast } from "react-toastify";
 
 const trainingPrograms = [
   { sn: 1, name: "Gardening and Landscaping", duration: "3 Months" },
-  { sn: 2, name: "Cultivation of Medicinal and Aromatic Plants", duration: "3 Months" },
+  {
+    sn: 2,
+    name: "Cultivation of Medicinal and Aromatic Plants",
+    duration: "3 Months",
+  },
   { sn: 3, name: "Mushroom Cultivator", duration: "4 Months" },
   { sn: 4, name: "Aloe Veera Cultivator cum Processor", duration: "3 Months" },
   { sn: 5, name: "Bee Keeping", duration: "2 Months" },
   { sn: 6, name: "Sericulturist", duration: "3 Months" },
   { sn: 7, name: "Multi Skilled Garment Technician", duration: "3 Months" },
-  { sn: 8, name: "Solar PV Engineer (Option: Solar Water Pumping System)", duration: "6 Months" },
-  { sn: 9, name: "Product Assembly Assistant(Solar-LED)", duration: "4 Months" },
-  { sn: 10, name: "Drone Manufacturing and Assembly Technician", duration: "5 Months" },
+  {
+    sn: 8,
+    name: "Solar PV Engineer (Option: Solar Water Pumping System)",
+    duration: "6 Months",
+  },
+  {
+    sn: 9,
+    name: "Product Assembly Assistant(Solar-LED)",
+    duration: "4 Months",
+  },
+  {
+    sn: 10,
+    name: "Drone Manufacturing and Assembly Technician",
+    duration: "5 Months",
+  },
   { sn: 11, name: "3D Printing Operator", duration: "6 Months" },
   { sn: 12, name: "Assistant Surveyor", duration: "4 Months" },
   { sn: 13, name: "Traditional Snack and Savoury Maker", duration: "3 Months" },
@@ -29,11 +46,19 @@ const trainingPrograms = [
   { sn: 18, name: "Beauty Therapist (Organic)", duration: "3 Months" },
   { sn: 19, name: "Beauty Therapist", duration: "4 Months" },
   { sn: 20, name: "Retail Sales Associate", duration: "3 Months" },
-  { sn: 21, name: "Installation and Servicing of CCTV Camera, Security Alarm and Smoke Detector", duration: "3 Months" },
+  {
+    sn: 21,
+    name: "Installation and Servicing of CCTV Camera, Security Alarm and Smoke Detector",
+    duration: "3 Months",
+  },
   { sn: 22, name: "Self Employed Tailor", duration: "3 Months" },
   { sn: 23, name: "IoT Hardware Analyst", duration: "4 Months" },
   { sn: 24, name: "Blockchain App Developer", duration: "6 Months" },
-  { sn: 25, name: "Electronic Hardware Assembly Operator", duration: "5 Months" },
+  {
+    sn: 25,
+    name: "Electronic Hardware Assembly Operator",
+    duration: "5 Months",
+  },
   { sn: 26, name: "Core BlockChain Developer", duration: "5 Months" },
   { sn: 27, name: "Vermicompost Producer", duration: "4 Months" },
   { sn: 28, name: "Assistant Electrician", duration: "5 Months" },
@@ -58,25 +83,38 @@ const SkillPage = () => {
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState({ name: "", email: "", phone: "", program: "", });
-  const [status, setStatus] = useState<"idle" | "success" | "error" | "captcha">("idle");
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    program: "",
+  });
+  const [status, setStatus] = useState<
+    "idle" | "success" | "error" | "captcha"
+  >("idle");
   const [captcha, setCaptcha] = useState("");
   const [captchaInput, setCaptchaInput] = useState("");
-
-  const filteredPrograms = trainingPrograms.filter(program =>
+  const [loading, setLoading] = useState(false);
+  const filteredPrograms = trainingPrograms.filter((program) =>
     program.name.toLowerCase().includes(search.toLowerCase())
   );
 
   const PAGE_SIZE = 10;
   const totalPages = Math.ceil(filteredPrograms.length / PAGE_SIZE);
   const startIndex = (currentPage - 1) * PAGE_SIZE;
-  const currentPrograms = filteredPrograms.slice(startIndex, startIndex + PAGE_SIZE);
+  const currentPrograms = filteredPrograms.slice(
+    startIndex,
+    startIndex + PAGE_SIZE
+  );
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const generateCaptcha = () => {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const chars =
+      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     let result = "";
     for (let i = 0; i < 5; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
@@ -88,17 +126,17 @@ const SkillPage = () => {
     if (isOpen) generateCaptcha();
   }, [isOpen]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // ✅ Check captcha
+    // 1️⃣ CAPTCHA CHECK
     if (captchaInput.trim().toLowerCase() !== captcha.toLowerCase()) {
       setStatus("captcha");
       generateCaptcha();
       return;
     }
 
-    // ✅ Validate form fields
+    // 2️⃣ FIELD VALIDATION
     if (
       !formData.name ||
       !formData.phone ||
@@ -109,13 +147,38 @@ const SkillPage = () => {
       return;
     }
 
-    // ✅ Simulate successful submission (without sending captcha)
-    setTimeout(() => {
-      setStatus("success");
-      setFormData({ name: "", email: "", phone: "", program: "" });
-      generateCaptcha();
-      setTimeout(() => setIsOpen(false), 1500);
-    }, 1000);
+    setLoading(true);
+
+    // 3️⃣ Prepare formData for API
+    const payload = new FormData();
+    payload.append("name", formData.name);
+    payload.append("email", formData.email);
+    payload.append("contact", formData.phone);
+    payload.append("program_name", formData.program);
+
+    try {
+      // 4️⃣ CALL API: ongoingtraining
+      const res = await postData("ongoingtraining", payload);
+
+      if (res.success) {
+        toast.success("Form Submitted Successfully!", { theme: "colored" });
+
+        // RESET FORM
+        setFormData({ name: "", email: "", phone: "", program: "" });
+        setCaptchaInput("");
+        generateCaptcha();
+        setStatus("success");
+
+        // CLOSE POPUP AFTER 1.5 sec
+        setTimeout(() => setIsOpen(false), 1500);
+      } else {
+        toast.error("Something went wrong!", { theme: "colored" });
+      }
+    } catch (error) {
+      toast.error("Server Error!", { theme: "colored" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   const modalVariants = {
@@ -137,20 +200,26 @@ const SkillPage = () => {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Focus Area", href: "/focus-area" },
+          { label: "Focus Area", href: "/focus-area/skill" },
           { label: content.label, href: "" },
         ]}
       />
 
       <section className="py-12 bg-gray-50">
         <div className="max-w-7xl mx-auto px-6 space-y-12">
-
           {/* Intro + Image + Features */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Left: Text & Features */}
             <div className="space-y-6 h-full ">
               <p className="text-gray-700 leading-relaxed text-justify">
-                CSRI has extensive experience in designing demand-driven training programs that align with both industry requirements and local livelihood opportunities. Training covers areas such as tailoring, data entry, retail management, CCTV supervision, rural enterprise development, and emerging skills like smart energy meter technology. We equip youth and communities with employable skills and entrepreneurial abilities, ensuring sustainable income opportunities.
+                CSRI has extensive experience in designing demand-driven
+                training programs that align with both industry requirements and
+                local livelihood opportunities. Training covers areas such as
+                tailoring, data entry, retail management, CCTV supervision,
+                rural enterprise development, and emerging skills like smart
+                energy meter technology. We equip youth and communities with
+                employable skills and entrepreneurial abilities, ensuring
+                sustainable income opportunities.
               </p>
 
               <div className="space-y-4">
@@ -161,7 +230,8 @@ const SkillPage = () => {
                     <div key={i} className="flex items-start gap-3">
                       <MdStar className="mt-1 text-blue-500/70  w-6 h-6 flex-shrink-0" />
                       <p className="text-gray-700 leading-relaxed">
-                        <span className="font-bold">{title}:</span> {desc.join(":")}
+                        <span className="font-bold">{title}:</span>{" "}
+                        {desc.join(":")}
                       </p>
                     </div>
                   );
@@ -198,13 +268,16 @@ const SkillPage = () => {
                   <div className="relative h-full w-8 bg-white/30" />
                 </div>
               </button>
-
-
             </div>
 
             {/* Right: Image */}
             <div className="w-full h-full min-h-[400px] relative overflow-hidden shadow-lg">
-              <Image src={content.image} alt={content.label} fill className="object-cover" />
+              <Image
+                src={content.image}
+                alt={content.label}
+                fill
+                className="object-cover"
+              />
             </div>
           </div>
 
@@ -227,23 +300,41 @@ const SkillPage = () => {
               <table className="min-w-full divide-y divide-gray-200 table-auto">
                 <thead className="bg-gray-200">
                   <tr>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">S. No.</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Course Name</th>
-                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">Duration</th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                      S. No.
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                      Course Name
+                    </th>
+                    <th className="px-4 py-3 text-left text-sm font-semibold text-gray-700">
+                      Duration
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {currentPrograms.map((program, idx) => (
-                    <tr key={program.sn} className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}>
-                      <td className="px-4 py-3 text-sm text-gray-700">{program.sn}</td>
-                      <td className="px-4 py-3 text-sm text-gray-700">{program.name}</td>
-                      <td className="px-4 py-3 text-sm text-gray-700">{program.duration}</td>
+                    <tr
+                      key={program.sn}
+                      className={idx % 2 === 0 ? "bg-white" : "bg-gray-50"}
+                    >
+                      <td className="px-4 py-3 text-sm text-gray-700">
+                        {program.sn}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700">
+                        {program.name}
+                      </td>
+                      <td className="px-4 py-3 text-sm text-gray-700">
+                        {program.duration}
+                      </td>
                     </tr>
                   ))}
 
                   {currentPrograms.length === 0 && (
                     <tr>
-                      <td colSpan={3} className="text-center px-4 py-3 text-gray-500">
+                      <td
+                        colSpan={3}
+                        className="text-center px-4 py-3 text-gray-500"
+                      >
                         No courses found.
                       </td>
                     </tr>
@@ -256,7 +347,9 @@ const SkillPage = () => {
             {totalPages > 1 && (
               <div className="flex justify-center items-center space-x-2 mt-4">
                 <button
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
                   disabled={currentPage === 1}
                   className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
                 >
@@ -266,13 +359,19 @@ const SkillPage = () => {
                   <button
                     key={i}
                     onClick={() => setCurrentPage(i + 1)}
-                    className={`px-3 py-1 rounded ${currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+                    className={`px-3 py-1 rounded ${
+                      currentPage === i + 1
+                        ? "bg-blue-600 text-white"
+                        : "bg-gray-200"
+                    }`}
                   >
                     {i + 1}
                   </button>
                 ))}
                 <button
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+                  }
                   disabled={currentPage === totalPages}
                   className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50"
                 >
@@ -281,7 +380,6 @@ const SkillPage = () => {
               </div>
             )}
           </div>
-
         </div>
 
         <AnimatePresence>
@@ -308,7 +406,9 @@ const SkillPage = () => {
                   ✕
                 </button>
 
-                <h3 className="text-xl font-bold mb-4">Join an Ongoing Training Program</h3>
+                <h3 className="text-xl font-bold mb-4">
+                  Join an Ongoing Training Program
+                </h3>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                   <input
@@ -388,19 +488,24 @@ const SkillPage = () => {
 
                   <button
                     type="submit"
+                    disabled={loading}
                     className="bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition-colors"
                   >
-                    Join
+                    {loading ? "Loading..." : "Join"}
                   </button>
 
                   {status === "success" && (
                     <p className="text-green-600">✅ Successfully joined!</p>
                   )}
                   {status === "error" && (
-                    <p className="text-red-600">⚠️ Please fill all required fields.</p>
+                    <p className="text-red-600">
+                      ⚠️ Please fill all required fields.
+                    </p>
                   )}
                   {status === "captcha" && (
-                    <p className="text-red-600">❌ Invalid CAPTCHA. Try again.</p>
+                    <p className="text-red-600">
+                      ❌ Invalid CAPTCHA. Try again.
+                    </p>
                   )}
                 </form>
               </motion.div>

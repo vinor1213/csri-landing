@@ -1,15 +1,67 @@
 "use client";
 
 import { motion } from "framer-motion";
-
+import { useState, useEffect } from "react";
+import { postData } from "@/app/lib/api";
+import { toast } from "react-toastify";
 
 const Digital = () => {
+  const [loading, setLoading] = useState(false);
+  const [captchaText, setCaptchaText] = useState("");
+  const [userCaptcha, setUserCaptcha] = useState("");
+
+  // Generate random 5-letter captcha
+  const generateCaptcha = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let text = "";
+    for (let i = 0; i < 5; i++) {
+      text += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    setCaptchaText(text);
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+
+    // Validate CAPTCHA
+    if (userCaptcha !== captchaText) {
+      toast.error("Captcha is incorrect!", { theme: "colored" });
+      setUserCaptcha("");
+      generateCaptcha();
+      return;
+    }
+
+    setLoading(true);
+
+    const formData = new FormData(e.target);
+
+    try {
+      const res = await postData("ourefforts", formData);
+
+      if (res.success) {
+        toast.success("Subscribed Successfully!", { theme: "colored" });
+        e.target.reset();
+        setUserCaptcha("");
+        generateCaptcha();
+      } else {
+        toast.error("Something went wrong!", { theme: "colored" });
+      }
+    } catch (error) {
+      toast.error("Server Error!", { theme: "colored" });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
-      <div id="join" className="overflow-hidden ">
+      <div id="join" className="overflow-hidden">
         <div className="px-4 py-16 mx-auto max-w-7xl md:px-24 lg:px-8 lg:py-20">
           <div className="flex flex-col items-center justify-between xl:flex-row">
-
             {/* LEFT COLUMN - OUR MISSION */}
             <motion.div
               className="w-full max-w-xl mb-12 xl:pr-16 xl:mb-0 xl:w-7/12"
@@ -27,8 +79,9 @@ const Digital = () => {
                 social initiatives.
               </h2>
               <p className="max-w-xl mb-6 text-base text-white md:text-lg text-center lg:text-left">
-                Join us in making a difference — empower communities, support education,
-                and drive sustainability with every effort you contribute.
+                Join us in making a difference — empower communities, support
+                education, and drive sustainability with every effort you
+                contribute.
               </p>
             </motion.div>
 
@@ -65,7 +118,8 @@ const Digital = () => {
                   <h3 className="mb-4 text-xl font-semibold sm:text-center sm:mb-6 sm:text-2xl">
                     Join Our Efforts
                   </h3>
-                  <form>
+
+                  <form onSubmit={handleSubmit}>
                     <div className="mb-1 sm:mb-2">
                       <label htmlFor="name" className="inline-block mb-1 font-medium">
                         Name
@@ -107,13 +161,49 @@ const Digital = () => {
                       />
                     </div>
 
+                    {/* Letters CAPTCHA */}
+                    <div className="flex flex-col space-y-2 mb-4">
+                      <div className="flex items-center">
+                        {/* CAPTCHA Text */}
+                        <span className="flex-1 px-3 py-3 bg-gray-200 text-gray-800 font-mono rounded select-none text-center">
+                          {captchaText}
+                        </span>
+
+                        {/* Refresh Button with Icon */}
+                        <button
+                          type="button"
+                          onClick={generateCaptcha}
+                          className="ml-2 flex items-center justify-center px-3 py-3 bg-blue-500 text-white rounded transition hover:bg-blue-600"
+                        >
+                        Refresh
+                        </button>
+                      </div>
+
+                      {/* Input Field */}
+                      <input
+                        type="text"
+                        value={userCaptcha}
+                        onChange={(e) => setUserCaptcha(e.target.value)}
+                        required
+                        placeholder="Enter the letters above"
+                        className="w-full px-4 py-3 rounded-lg bg-white text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                      />
+                    </div>
+
+
                     <div className="mt-4 mb-2 sm:mb-4">
-
-
-                      <button type="submit" className="group  w-full relative h-12  overflow-hidden rounded-md bg-blue-500 px-6 text-neutral-50 transition hover:bg-blue-600"><span className="relative "> Subscribe</span><div className="animate-shine-infinite absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full justify-center blur-[12px]"><div className="relative h-full w-8 bg-white/30"></div></div></button>
-
-
-
+                      <button
+                        type="submit"
+                        disabled={loading}
+                        className="group w-full relative h-12 overflow-hidden rounded-md bg-blue-500 px-6 text-neutral-50 transition hover:bg-blue-600"
+                      >
+                        <span className="relative">
+                          {loading ? "Submitting..." : "Subscribe"}
+                        </span>
+                        <div className="animate-shine-infinite absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full justify-center blur-[12px]">
+                          <div className="relative h-full w-8 bg-white/30"></div>
+                        </div>
+                      </button>
                     </div>
                     <p className="text-xs text-gray-600 sm:text-sm">
                       We respect your privacy. Unsubscribe at any time.
@@ -125,8 +215,6 @@ const Digital = () => {
           </div>
         </div>
       </div>
-
-
     </>
   );
 };

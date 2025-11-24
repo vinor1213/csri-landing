@@ -1,6 +1,3 @@
-
-
-
 "use client";
 
 import { useState } from "react";
@@ -8,8 +5,6 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import ReuseBanner from "../components/ReuseBanner";
 import Breadcrumb from "../components/Breadcrumb";
-
-
 
 type Profile = {
   id: number;
@@ -23,15 +18,12 @@ type Profile = {
   bio: string;
 };
 
-
 const profilesx = [
-
   {
     id: 5,
     name: "Prithvi Krishna",
     role: "Chief Advisor – CSRI",
-    image:
-      "https://img.freepik.com/premium-vector/vector-flat-suitable-social-media-profiles-icons-screensavers-as-template-business-concept_719432-2753.jpg",
+    image: "/images/team/Prithvi-Krishna.jpg",
     facebook: "https://facebook.com/prithvikrishna",
     twitter: "https://twitter.com/prithvikrishna",
     instagram: "https://instagram.com/prithvikrishna",
@@ -55,7 +47,7 @@ Under his guidance, CSRI continues to transform corporate social responsibility 
     id: 1,
     name: "Nantha Kumar N",
     role: "Manager – CSRI ",
-    image: "https://img.freepik.com/premium-vector/vector-flat-suitable-social-media-profiles-icons-screensavers-as-template-business-concept_719432-2753.jpg",
+    image: "/images/team/Nantha-Kumar.jpg",
     facebook: "https://facebook.com/manager",
     twitter: "https://twitter.com/manager",
     instagram: "https://instagram.com/manager",
@@ -75,7 +67,7 @@ His areas of expertise include:
   <li><strong>Rural Development & Sustainable Livelihoods</strong></li>
   <li><strong>Tamil Folklore Art and Traditions</strong></li>
 </ul>
-`
+`,
   },
   {
     id: 2,
@@ -98,7 +90,7 @@ Prem's areas of expertise include:
   <li><strong>Rural Development, Agro-Tourism & Sustainable Livelihoods</strong></li>
   <li><strong>Research & Social Science Publications</strong></li>
 </ul>
-`
+`,
   },
 
   {
@@ -122,25 +114,23 @@ Areas of expertise:
   <li><strong>Project Coordination</strong></li>
   <li><strong>Innovation and Entrepreneur Development</strong></li>
 </ul>
-`
+`,
   },
 
   {
     id: 4,
     name: "Mala",
     role: "Mobilizer – CSRI",
-    image: "https://img.freepik.com/premium-vector/vector-flat-suitable-social-media-profiles-icons-screensavers-as-template-business-concept_719432-2753.jpg",
+    image:
+      "https://img.freepik.com/premium-vector/vector-flat-suitable-social-media-profiles-icons-screensavers-as-template-business-concept_719432-2753.jpg",
     facebook: "https://facebook.com/mobilizer",
     twitter: "https://twitter.com/mobilizer",
     instagram: "https://instagram.com/mobilizer",
     linkedin: "https://linkedin.com/in/mobilizer",
     bio: `<strong>Mala,</strong> Mobilizer at <strong>CSRI, Sona College of Technology</strong>, brings over 15 years of experience in office assistance and community engagement. Starting her career as an Office Assistant, she has grown into a key role connecting communities with skill development and training programs.
 
-Mala excels at <strong>building trust, motivating participation, and coordinating</strong> smoothly between beneficiaries and program teams. She actively supports outreach efforts that empower individuals, particularly women and underprivileged groups, to access new learning and livelihood opportunities, making a lasting impact in the communities she serves.`
+Mala excels at <strong>building trust, motivating participation, and coordinating</strong> smoothly between beneficiaries and program teams. She actively supports outreach efforts that empower individuals, particularly women and underprivileged groups, to access new learning and livelihood opportunities, making a lasting impact in the communities she serves.`,
   },
-
-
-
 ];
 
 const Teammanage = () => {
@@ -148,7 +138,7 @@ const Teammanage = () => {
   return (
     <div className=" bg-gray-50 dark:bg-gray-900 dark:text-gray-100">
       <ReuseBanner
-        image="/images/focus-area/Join-CSRI.webp"
+        image="/images/team/team-background.jpeg"
         title="Team"
         subtitle="Guiding the Vision for Impactful Change"
       />
@@ -163,10 +153,8 @@ const Teammanage = () => {
 
       {/* ✅ Page Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-
-
         {/* Team Section */}
-        <section >
+        <section>
           <p className="text-sm font-medium tracking-wider text-gray-600 dark:text-gray-300 uppercase">
             Team Members
           </p>
@@ -175,8 +163,6 @@ const Teammanage = () => {
           </h1>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
-
-
             {profilesx.map((profile: any) => (
               <div
                 key={profile.id}
@@ -199,8 +185,6 @@ const Teammanage = () => {
                     </div>
                   </div>
 
-
-
                   <div className="flex gap-2 px-2">
                     <button
                       onClick={() => setSelectedProfile(profile)}
@@ -220,13 +204,10 @@ const Teammanage = () => {
                       </span>
                     </button>
                   </div>
-
                 </div>
               </div>
             ))}
-
           </div>
-
         </section>
         <AnimatePresence>
           {selectedProfile && (
@@ -283,7 +264,6 @@ const Teammanage = () => {
             </motion.div>
           )}
         </AnimatePresence>
-
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
+import { newsandeventsData } from "@/data/newsandevents";
 import CountUp from "react-countup";
 import Link from "next/link"
 import {
@@ -97,85 +98,11 @@ const StatCard = ({ icon: Icon, label, value, delay }: StatProps) => {
 const Aboutus = () => {
   const [expandedIndex, setExpandedIndex] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState("News");
-  const EventsData = [
-    // 🌍 NEWS
-    {
-      title: "CSRI Partners with Local Schools for Sustainability Drive",
-      date: "Oct 20, 2025",
-      description:
-        "CSRI has launched a new partnership with 15 schools to promote environmental awareness and introduce recycling programs among students.",
-      img:"https://img.freepik.com/premium-psd/poster-world-environment-day-with-green-hands-holding-globe_719635-283.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "News",
-    },
-    {
-      title: "Tree Plantation Milestone Achieved: 10,000 Saplings!",
-      date: "Sep 12, 2025",
-      description:
-        "Our volunteers have successfully planted over 10,000 trees across three cities, contributing to cleaner air and greener communities.",
-      img: "https://img.freepik.com/premium-photo/volunteering-charity-cleaning-people-ecology-concept-group-happy-volunteers-with-garbage-bags-cleaning-area-park_380164-135900.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "News",
-    },
-    {
-      title: "Women Empowerment Workshop Featured in Local Press",
-      date: "Aug 8, 2025",
-      description:
-        "The recent skill development workshop organized by CSRI gained recognition for its impact on empowering women in rural communities.",
-      img: "https://img.freepik.com/premium-photo/organize-portrayal-rehabilitation-workshop-individuals-affected-by-leprosy_950002-444089.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "News",
-    },
-
-    // 🤝 EVENTS
-    {
-      title: "Community Health Awareness Camp",
-      date: "Nov 15, 2025",
-      description:
-        "Join our health camp offering free medical check-ups, nutrition counseling, and awareness sessions on preventive healthcare.",
-      img: "https://img.freepik.com/free-photo/man-working-as-paediatrician_23-2151696259.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "Events",
-    },
-    {
-      title: "Youth Volunteering Day",
-      date: "Dec 2, 2025",
-      description:
-        "A nationwide volunteering day inviting youth to participate in social clean-ups, mentoring, and awareness programs.",
-      img: "https://img.freepik.com/premium-photo/portrait-friends-sitting-land_1048944-4264349.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "Events",
-    },
-    {
-      title: "Inclusive Education Forum 2025",
-      date: "Dec 18, 2025",
-      description:
-        "Educators, NGOs, and policymakers come together to discuss inclusive learning strategies for underprivileged children.",
-      img: "https://img.freepik.com/premium-photo/organize-portrayal-rehabilitation-workshop-individuals-affected-by-leprosy_950002-453738.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "Events",
-    },
-
-    // 🌱 UPCOMING EVENTS
-    {
-      title: "Green Future Summit 2026",
-      date: "Jan 22, 2026",
-      description:
-        "An annual summit focused on climate action, renewable energy, and sustainable urban living — featuring global thought leaders.",
-      img: "https://img.freepik.com/premium-photo/young-indian-agronomist-banker-showing-some-information-farmer-smartphone-agriculture-field_75648-7034.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "Upcoming",
-    },
-    {
-      title: "Rural Skill Development Program Launch",
-      date: "Feb 10, 2026",
-      description:
-        "CSRI will begin a six-month initiative providing hands-on vocational training to rural youth in digital literacy and entrepreneurship.",
-      img: "https://img.freepik.com/premium-photo/young-indian-banker-discuss-with-farmer-home_75648-3099.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "Upcoming",
-    },
-    {
-      title: "International Day of Clean Energy Drive",
-      date: "Mar 15, 2026",
-      description:
-        "A CSR-driven campaign encouraging clean energy adoption, solar power awareness, and energy-saving workshops.",
-      img: "https://img.freepik.com/premium-photo/indian-child-running-playing-with-pinwheel_75648-1752.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
-      type: "Upcoming",
-    },
-  ];
+  const tabMapping: Record<string, string> = {
+    News: "News",
+    Events: "past", // or "upcoming" depending on your tab logic
+    Upcoming: "upcoming",
+  };
 
 
 
@@ -352,46 +279,47 @@ const Aboutus = () => {
 
             {/* Scrollable List */}
             <div className="overflow-y-auto h-[400px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-              {EventsData.filter((item) => item.type === activeTab)
-                .slice(0, 10)
+              {newsandeventsData[tabMapping[activeTab]]
+                ?.slice(0, 10)
                 .map((event, i) => (
-                  <motion.div
+                  <Link
+                    href={`/events/${event.slug}`}
                     key={i}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, delay: i * 0.1 }}
-                    viewport={{ once: true }}
-                    className="bg-white  shadow-md px-3 py-2 hover:shadow-lg transition-shadow flex gap-3 mb-3"
+                    className="block"
                   >
-                    {/* Thumbnail */}
-                    <Image
-                      src={event.img}
-                      alt={event.title}
-                      width={80}
-                      height={80}
-                      className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
-                    />
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.4, delay: i * 0.1 }}
+                      viewport={{ once: true }}
+                      className="bg-white shadow-md px-3 py-2 hover:shadow-lg transition-shadow flex gap-3 mb-3 cursor-pointer"
+                    >
+                      {/* Thumbnail */}
+                      <Image
+                        src={event.imgSrc}
+                        alt={event.title}
+                        width={80}
+                        height={80}
+                        className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
+                      />
 
-                    {/* Details */}
-                    <div className="flex flex-col justify-between">
-                      <h4 className="text-sm font-semibold text-black">{event.title}</h4>
-                      <p className="text-xs text-gray-500">{event.date}</p>
-                      <p className="text-xs text-gray-700 line-clamp-2">{event.description}</p>
-                    </div>
-                  </motion.div>
+                      {/* Details */}
+                      <div className="flex flex-col justify-between">
+                        <h4 className="text-sm font-semibold text-black">{event.title}</h4>
+                        <p className="text-xs text-gray-500">
+                          {event.startDate === event.endDate
+                            ? event.startDate
+                            : `${event.startDate} - ${event.endDate}`}
+                        </p>
+                        <p className="text-xs text-gray-700 line-clamp-2">{event.description}</p>
+                      </div>
+                    </motion.div>
+                  </Link>
                 ))}
             </div>
           </div>
 
         </div>
-
-
-
-
-
-
-
-
 
 
         {/* Know More Button */}

@@ -58,7 +58,7 @@ export default function AlumniPage() {
   return (
     <div>
       <ReuseBanner
-        image="https://www.sonabusinessschool.com/images/banner/program-banners/admission.webp"
+        image="/images/banner/alumni-partners.jpg"
         title=" Pratner With Us - Alumni"
         subtitle="Reconnect, Mentor, Volunteer"
       />
@@ -66,7 +66,7 @@ export default function AlumniPage() {
       <Breadcrumb
         items={[
           { label: "Home", href: "/" },
-          { label: "Partners", href: "/partners" },
+          { label: "Partners", href: "/partners/alumni" },
           { label: "Alumni" },
         ]}
       />
@@ -132,13 +132,31 @@ export default function AlumniPage() {
             >
               <div className="relative flex flex-col items-center w-full mx-auto overflow-hidden  md:flex-row-reverse md:max-w-4xl lg:max-w-5xl">
                 {/* Image Section */}
-                <div className="w-full h-48 md:h-60 md:w-1/2">
+                <div className="relative w-full h-48 md:h-60 md:w-1/2 group">
                   <img
                     className="h-full w-full object-cover"
-                    src="https://picsum.photos/id/1018/800/600"
+                    src="/images/gallery/others/alumni.jpg"
                     alt="Winding mountain road"
                   />
+
+                  {/* MOBILE: always visible | DESKTOP: show on hover */}
+                  <a
+                    href="https://www.sonatptalumni.org/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="
+      absolute inset-0 bg-black/50 flex items-center justify-center
+      opacity-100 md:opacity-0 md:group-hover:opacity-100
+      transition-opacity duration-300
+    "
+                  >
+                    <span className="text-white font-semibold bg-black/60 px-4 py-2 rounded-lg">
+                      View More
+                    </span>
+                  </a>
                 </div>
+
+
 
                 {/* Content Section */}
                 <div className="bg-white text-gray-800 w-full md:w-1/2 h-full flex flex-col justify-center p-6 md:p-8">

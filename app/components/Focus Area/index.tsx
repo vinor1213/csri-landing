@@ -11,7 +11,7 @@ import {
   FaFemale,
   FaCity,
   FaBook,
-  FaArrowRight,
+
 } from "react-icons/fa";
 
 const focusAreas = [
@@ -118,9 +118,9 @@ export default function CSRIFocusPage() {
                     </h3>
 
                     <button
-                      // onClick={() =>
-                      //   router.push(`/programs?category=${program.slug}`)
-                      // }
+                      onClick={() =>
+                        router.push(`${program.slug}`)
+                      }
                       className="hover:bg-blue-500 group relative inline-flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-blue-600 font-medium text-neutral-200"
                     >
                       <div className="translate-x-0 transition group-hover:translate-x-[300%]">

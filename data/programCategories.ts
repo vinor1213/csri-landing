@@ -9,7 +9,7 @@ export const programCategories = [
   },
   {
     title: "Student-led EPICS Initiative",
-    slug: "student-led-epics-initiative",
+    slug: "/programs/student-led-epics",
     desc: "Empowering students to solve real community challenges through innovation.",
     image:
       "/images/programs/Programs-Student-Led-EPICS-Initiative.webp",
@@ -17,7 +17,7 @@ export const programCategories = [
   },
   {
     title: "Livelihood Promotion Activities",
-    slug: "livelihood-promotion-activities",
+    slug: "/programs/livelihood-promotion",
     desc: "Training and initiatives to improve community income and employment.",
     image:
       "/images/programs/Programs-Liveliood-Promotion-Activities.webp",
@@ -25,7 +25,7 @@ export const programCategories = [
   },
   {
     title: "Research Projects for Communities",
-    slug: "research-projects-for-communities",
+    slug: "/programs/research-projects",
     desc: "Applied research focused on social and economic development.",
     image:
       "/images/programs/Programs-Research-Projects-in-Community-Front.webp",
@@ -33,7 +33,7 @@ export const programCategories = [
   },
   {
     title: "On-going Training Programs",
-    slug: "on-going-training-programs",
+    slug: "#ongoing",
     desc: "Programs in Jr. Technician, Aari Work, Tailoring, Beauty Therapy, Saree Draping, etc.",
     image:
       "/images/on-going-training-projects/energy.webp",
@@ -41,7 +41,7 @@ export const programCategories = [
   },
   {
     title: "Community Health Initiative Programme",
-    slug: "community-health-initiative-programme",
+    slug: "/programs/community-health",
     desc: "Medical Camps, Health Awareness, Rejuvenation Programmes",
     image:
       "/images/programs/Programs-Community-Health.webp",
