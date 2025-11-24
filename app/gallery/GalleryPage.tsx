@@ -207,7 +207,7 @@ const programData: ProgramDataType[] = [
       { title: "Fashion & Apparels 7", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-7.webp" },
       { title: "Fashion & Apparels 8", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-8.webp" },
       { title: "Fashion & Apparels 9", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-9.webp" },
-      { title: "Fashion & Apparels 10", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-10.webp" },
+      // { title: "Fashion & Apparels 10", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-10.webp" },
       { title: "Fashion & Apparels 11", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-11.webp" },
       { title: "Fashion & Apparels 12", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-12.webp" },
       { title: "Fashion & Apparels 13", imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-13.webp" },

@@ -44,7 +44,7 @@ export default function CommunityHealthPage() {
             viewport={{ once: true }}
           >
             <img
-              src="/images/team/senthil-kumar.webp"
+              src="/images/gallery/health/health1-15.webp"
               className=" object-cover w-full"
               alt="Community Health Initiative"
             />

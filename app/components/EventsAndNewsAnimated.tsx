@@ -123,7 +123,7 @@ export default function NewsAndEventsPage({ event, allEvents }: NewsAndEventsPag
                 <p className="text-gray-700">{event.description}</p>
 
                 {/* Event Additional Images */}
-                {event.images && event.images.length > 0 && (
+                {/* {event.images && event.images.length > 0 && (
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
                         {event.images.map((img, idx) => (
                             <Image
@@ -136,7 +136,7 @@ export default function NewsAndEventsPage({ event, allEvents }: NewsAndEventsPag
                             />
                         ))}
                     </div>
-                )}
+                )} */}
 
                 {/* Previous / Next Navigation */}
                 <div className="flex flex-col sm:flex-row justify-between mt-8 gap-4">

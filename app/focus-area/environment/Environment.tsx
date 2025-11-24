@@ -11,7 +11,7 @@ const EnvironmentPage = () => {
     label: "Environment & Sustainability",
     bannerImage: "https://img.freepik.com/free-photo/cutout-paper-different-family-members-being-together_23-2148699752.jpg?uid=R139790849&ga=GA1.1.898221838.1748329700&semt=ais_hybrid&w=740&q=80",
     topImage: "/images/focus-area/Focus-Area-Environment.webp",
-    bottomImage: "/images/gallery/others/cut-4.JPG",
+    bottomImage: "/images/gallery/others/cut-4.jpg",
     description: `Sona places environmental stewardship at the core of its work by encouraging green practices, climate-smart livelihoods, and community participation in conserving natural resources supported by our on-ground experience in organizing plantation drives, waste management efforts, research initiations, eco-skilling campaigns, and capacity-building programs. These efforts are further reinforced by Sona R&D Centres, which have taken deep consideration of environment-focused research and engaged in renewable energy systems, climate-smart agriculture, and green technology innovations. We integrate eco-friendly practices and climate-smart solutions into community development, ensuring both awareness and hands-on green action.`,
     points: [
       {
