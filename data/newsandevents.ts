@@ -8,6 +8,7 @@ export interface EventType {
     imgSrc: string; // main image
     images?: string[];  // extra images
     category: string;
+    showfront?: boolean; // optional
 }
 
 
@@ -23,7 +24,8 @@ export const newsandeventsData: Record<string, EventType[]> = {
                 "This programme marks an exciting beginning for aspiring artisans stepping into the world of creative craftsmanship. This initiative empowers participants with hands-on skills to design unique, eco-friendly terracotta jewellery that blends tradition with modern fashion trends. With inspiring messages from dignitaries, the ceremony celebrates creativity, skill development, and the promise of transforming artistic passion into meaningful livelihoods.",
             imgSrc: "/images/events-news/Jewellery-Designer.webp",
             images: ["/images/events-news/Jewellery-Designer.webp"],
-            category: "Women Empowerment",
+            category: "Upcoming Events",
+            showfront: true,
         },
         {
             title: "Commencement of Multi Skilled Garment Technician",
@@ -34,7 +36,8 @@ export const newsandeventsData: Record<string, EventType[]> = {
                 "SAIL Salem Steel Plant sponsored Multi Skilled Garment Technician programme proudly launches a transformative skill development initiative designed to uplift aspiring entrepreneurs. This event showcases SRCL’s commitment to empowering women and youth with professional tailoring expertise that opens doors to income generation and self-employment.",
             imgSrc: "/images/events-news/Multi-Skilled-Garment-Technician.webp",
             images: ["/images/events-news/Multi-Skilled-Garment-Technician.webp"],
-            category: "Skill Development",
+            category: "Upcoming Events",
+            showfront: true,
         },
     ],
 
@@ -48,7 +51,8 @@ export const newsandeventsData: Record<string, EventType[]> = {
                 "The Inauguration Ceremony of the SRCL Self Employed Tailor programme proudly launches a transformative skill development initiative designed to uplift aspiring entrepreneurs. This event showcases SRCL’s commitment to empowering women and youth with professional tailoring expertise that opens doors to income generation and self-employment. With insightful addresses from dignitaries and a strong focus on community impact, the ceremony inspires participants to embark confidently on their journey toward financial independence and creative enterprise.",
             imgSrc: "/images/newsandevents/news-1.webp",
             images: ["/images/newsandevents/news-1.webp"],
-            category: "Skill Development",
+            category: "News",
+            showfront: true,
         },
         {
             title: "Launch of Sona Health on Wheels – Naturopathy Focused",
@@ -57,9 +61,9 @@ export const newsandeventsData: Record<string, EventType[]> = {
             endDate: "2025-11-17",
             description:
                 "The prestigious launch of “Sona Health on Wheels,” graced by the Hon’ble Tourism Minister, marks a visionary step in delivering holistic healthcare directly to communities. This state-of-the-art mobile wellness unit brings naturopathy, yoga therapy, lifestyle counselling, and health awareness to underserved regions. This pioneering effort integrates traditional healing with modern outreach, transforming rural wellness.",
-           imgSrc: "/images/newsandevents/news-2.webp",
+            imgSrc: "/images/newsandevents/news-2.webp",
             images: ["/images/newsandevents/news-2.webp"],
-            category: "Health & Well-being",
+            category: "News",
         },
     ],
 
@@ -71,9 +75,10 @@ export const newsandeventsData: Record<string, EventType[]> = {
             endDate: "",
             description:
                 "The Valedictory Ceremony celebrates the outstanding achievements of participants who have successfully completed the Self-Supportive Courses in Aari Work and Beauty Therapy. This vibrant event highlights their creativity, talent, and dedication to mastering high-demand skills.",
-            imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-11.webp",
+              imgSrc: "/images/newsandevents/Valedictory-1.JPG",
             images: ["/images/gallery/Fashion-Apparels/fashion-apparels-11.webp"],
-            category: "Skill Development",
+            category: "Past Events",
+            showfront: true,
         },
         {
             title: "Certificate Distribution Ceremony of Self Employed Tailor and Domestic Data Entry Operator",
@@ -82,9 +87,9 @@ export const newsandeventsData: Record<string, EventType[]> = {
             endDate: "",
             description:
                 "This celebratory ceremony honors the newly skilled graduates of the Self Employed Tailor and Domestic Data Entry Operator programmes, showcasing their readiness to step into workspaces or begin self-driven careers.",
-            imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-21.webp",
+            imgSrc: "/images/newsandevents/self-1.webp",
             images: ["/images/gallery/Fashion-Apparels/fashion-apparels-21.webp"],
-            category: "Skill Development",
+            category: "Past Events",
         },
         {
             title: "Certificate Distribution Ceremony of 7 different Skill Development Programmes",
@@ -93,9 +98,10 @@ export const newsandeventsData: Record<string, EventType[]> = {
             endDate: "",
             description:
                 "The Certificate Distribution Ceremony brings together achievers from seven diverse Skill Development Programmes, celebrating their commitment to building future-ready careers and empowering individuals with industry-relevant expertise.",
-            imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-20.webp",
+             imgSrc: "/images/newsandevents/skill-1.webp",
             images: ["/images/gallery/Fashion-Apparels/fashion-apparels-20.webp"],
-            category: "Skill Development",
+            category: " Past Events",
+            showfront: true,
         },
         {
             title: "FDP – AI in Naturopathy and AYUSH",
@@ -104,9 +110,10 @@ export const newsandeventsData: Record<string, EventType[]> = {
             endDate: "2025-11-21",
             description:
                 "The Faculty Development Program on “AI in Naturopathy and AYUSH” presents an exciting platform for educators to explore the future of traditional healthcare enhanced by cutting-edge technologies.",
-            imgSrc: "/images/gallery/health/health1-12.webp",
+            imgSrc: "/images/newsandevents/past-1.webp",
             images: ["/images/gallery/health/health1-12.webp"],
-            category: "Health & Well-being",
+            category: "Past Events",
+            showfront: true,
         },
         {
             title: "Naturopathy Medical Camp for School Students",
@@ -117,7 +124,8 @@ export const newsandeventsData: Record<string, EventType[]> = {
                 "The Naturopathy Medical Camp encourages students to adopt healthy, natural, preventive wellness practices through yoga sessions, nutrition guidance, health screenings and fun learning.",
             imgSrc: "/images/gallery/health/health1-15.webp",
             images: ["/images/gallery/health/health1-15.webp"],
-            category: "Health & Well-being",
+            category: " Past Events",
+            showfront: true,
         },
         {
             title: "Career Guidance Program",
@@ -126,9 +134,9 @@ export const newsandeventsData: Record<string, EventType[]> = {
             endDate: "2025-02-25",
             description:
                 "The Career Guidance Program empowers students by introducing emerging career trends, in-demand skills, scholarship routes, and industry expectations.",
-            imgSrc: "/images/gallery/Fashion-Apparels/fashion-apparels-26.webp",
+            imgSrc: "/images/newsandevents/past-2.webp",
             images: ["/images/gallery/Fashion-Apparels/fashion-apparels-26.webp"],
-            category: "Skill Development",
+            category: " Past Events",
         },
     ],
 };

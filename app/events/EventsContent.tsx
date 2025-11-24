@@ -21,22 +21,35 @@ const EventsPage = () => {
     const [startDateFilter, setStartDateFilter] = useState("");
     const [endDateFilter, setEndDateFilter] = useState("");
     const filteredEvents = useMemo(() => {
-        return newsandeventsData[activeTab].filter((event) => {
+        // Clone data
+        const list = [...newsandeventsData[activeTab]];
+
+        // ✅ Sort by date (newest first)
+        list.sort((a, b) => {
+            const dateA = a.startDate ? new Date(a.startDate) : new Date(0);
+            const dateB = b.startDate ? new Date(b.startDate) : new Date(0);
+            return dateB.getTime() - dateA.getTime(); // newest first
+        });
+
+        // ✅ Apply filters
+        return list.filter((event) => {
             const matchText =
                 event.title.toLowerCase().includes(search.toLowerCase()) ||
                 event.category.toLowerCase().includes(search.toLowerCase()) ||
                 event.description.toLowerCase().includes(search.toLowerCase());
 
             const matchStartDate =
-                !startDateFilter || (event.startDate && new Date(event.startDate) >= new Date(startDateFilter));
+                !startDateFilter ||
+                (event.startDate && new Date(event.startDate) >= new Date(startDateFilter));
 
             const matchEndDate =
-                !endDateFilter || (event.endDate && new Date(event.endDate) <= new Date(endDateFilter));
-
+                !endDateFilter ||
+                (event.endDate && new Date(event.endDate) <= new Date(endDateFilter));
 
             return matchText && matchStartDate && matchEndDate;
         });
     }, [activeTab, search, startDateFilter, endDateFilter]);
+
 
     const [page, setPage] = useState(1);
     const itemsPerPage = 3;
@@ -162,9 +175,7 @@ const EventsPage = () => {
 
                                                     {/* TEXT DETAILS */}
                                                     <div className="flex flex-col flex-1">
-                                                        <p className="text-blue-600 font-semibold text-xs sm:text-sm">
-                                                            {event.category}
-                                                        </p>
+                                                       
 
                                                         <a href={`/events/${event.slug}`} className="block">
                                                             <h3 className="text-lg font-bold">{event.title}</h3>
@@ -243,7 +254,7 @@ const EventsPage = () => {
                                 <div className="mt-3 flex-1 overflow-y-auto">
                                     <div className="space-y-4">
                                         {filteredEvents.map((event, idx) => (
-                                            <a    key={event.slug}  href={`/events/${event.slug}`} className="block">
+                                            <a key={event.slug} href={`/events/${event.slug}`} className="block">
 
                                                 <div
                                                     key={idx}
@@ -261,9 +272,7 @@ const EventsPage = () => {
 
                                                     {/* Text */}
                                                     <div className="flex flex-col">
-                                                        <p className="text-sm font-semibold text-blue-600">
-                                                            {event.category}
-                                                        </p>
+                                                     
                                                         <h4 className="text-sm font-semibold line-clamp-1">{event.title}</h4>
                                                         <p className="text-xs text-gray-500">
                                                             {event.startDate} → {event.endDate}

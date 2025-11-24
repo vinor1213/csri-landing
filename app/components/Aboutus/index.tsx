@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { motion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { newsandeventsData } from "@/data/newsandevents";
+import { newsandeventsData, EventType } from "@/data/newsandevents";
 import CountUp from "react-countup";
 import Link from "next/link"
 import {
@@ -104,6 +104,13 @@ const Aboutus = () => {
     Upcoming: "upcoming",
   };
 
+  function sortByDate(events: EventType[]) {
+    return [...events].sort((a, b) => {
+      const dateA = a.startDate ? new Date(a.startDate).getTime() : 0;
+      const dateB = b.startDate ? new Date(b.startDate).getTime() : 0;
+      return dateB - dateA; // newest first
+    });
+  }
 
 
   return (
@@ -279,8 +286,8 @@ const Aboutus = () => {
 
             {/* Scrollable List */}
             <div className="overflow-y-auto h-[400px] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200">
-              {newsandeventsData[tabMapping[activeTab]]
-                ?.slice(0, 10)
+              {sortByDate(newsandeventsData[tabMapping[activeTab]] || [])
+                .slice(0, 10)
                 .map((event, i) => (
                   <Link
                     href={`/events/${event.slug}`}
@@ -294,7 +301,6 @@ const Aboutus = () => {
                       viewport={{ once: true }}
                       className="bg-white shadow-md px-3 py-2 hover:shadow-lg transition-shadow flex gap-3 mb-3 cursor-pointer"
                     >
-                      {/* Thumbnail */}
                       <Image
                         src={event.imgSrc}
                         alt={event.title}
@@ -303,20 +309,24 @@ const Aboutus = () => {
                         className="w-20 h-20 rounded-lg object-cover flex-shrink-0"
                       />
 
-                      {/* Details */}
                       <div className="flex flex-col justify-between">
                         <h4 className="text-sm font-semibold text-black">{event.title}</h4>
+
                         <p className="text-xs text-gray-500">
                           {event.startDate === event.endDate
                             ? event.startDate
                             : `${event.startDate} - ${event.endDate}`}
                         </p>
-                        <p className="text-xs text-gray-700 line-clamp-2">{event.description}</p>
+
+                        <p className="text-xs text-gray-700 line-clamp-2">
+                          {event.description}
+                        </p>
                       </div>
                     </motion.div>
                   </Link>
                 ))}
             </div>
+
           </div>
 
         </div>

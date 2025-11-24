@@ -14,7 +14,7 @@ const slides = [
     title: "Committed to making a positive impact.",
     button: "Join Us",
     href: "#join",
-    img: "/images/banner/BANNER1.webp",
+    img: "/images/gallery/health/health1-12.webp",
   },
   {
     tag: "COMMUNITY DEVELOPMENT",

@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { FaWhatsapp, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, } from "react-icons/fa";
 import { EventType as EventDataType } from "@/data/newsandevents";
 import { FiShare2 } from "react-icons/fi";
+import { Home } from "lucide-react";
+import { newsandeventsData } from "@/data/newsandevents";
 export interface EventType extends Omit<EventDataType, "startDate" | "endDate"> {
     startDate?: string;
     endDate?: string;
@@ -23,15 +25,59 @@ export default function NewsAndEventsPage({ event, allEvents }: NewsAndEventsPag
     const router = useRouter();
     const [search, setSearch] = useState("");
 
-    const filteredEvents = allEvents.filter((e) =>
-        e.title.toLowerCase().includes(search.toLowerCase())
-    );
+    const filteredEvents = allEvents
+        .filter((e) => e.title.toLowerCase().includes(search.toLowerCase()))
+        .sort((a, b) => {
+            const dateA = new Date(a.startDate || a.endDate || 0).getTime();
+            const dateB = new Date(b.startDate || b.endDate || 0).getTime();
+            return dateB - dateA; // latest first
+        });
+
 
     const currentUrl = typeof window !== "undefined" ? window.location.href : "";
 
     const currentIndex = allEvents.findIndex((e) => e.slug === event.slug);
     const prevEvent = allEvents[currentIndex - 1];
     const nextEvent = allEvents[currentIndex + 1];
+
+    function formatDate(dateStr: string | undefined): string {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+
+        return `${day}/${month}/${year}`;
+    }
+
+    function formatDMY(dateStr?: string) {
+        if (!dateStr) return "";
+        const date = new Date(dateStr);
+        const day = String(date.getDate()).padStart(2, "0");
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const year = date.getFullYear();
+        return `${day}/${month}/${year}`;
+    }
+    // Merge all categories
+    const mergedEvents = [
+        ...newsandeventsData.upcoming,
+        ...newsandeventsData.News,
+        ...newsandeventsData.past,
+    ];
+
+    // Convert date safely
+    const parseDate = (date?: string) => {
+        if (!date) return 0;
+        const d = new Date(date);
+        return isNaN(d.getTime()) ? 0 : d.getTime();
+    };
+
+    // Filter: showfront === true and sort by latest date
+    const recentItems = mergedEvents
+        .filter((e) => e.showfront === true)
+        .sort((a, b) => parseDate(b.startDate) - parseDate(a.startDate));
+
 
     return (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 sm:pt-24 pb-20 sm:pb-24 grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -52,21 +98,48 @@ export default function NewsAndEventsPage({ event, allEvents }: NewsAndEventsPag
                         &larr; Back
                     </button>
                 </div>
+                <nav className="text-gray-400 text-sm mb-2" aria-label="Breadcrumb">
+                    <ol className="list-none p-0 inline-flex items-center space-x-1">
+
+                        {/* Home */}
+                        <li className="flex items-center">
+                            <a href="/" className="hover:underline text-blue-600 flex items-center gap-1">
+                                <Home className="w-3 h-3" />
+                                Home
+                            </a>
+                            <span className="mx-1">/</span>
+                        </li>
+
+                        {/* Events */}
+                        <li>
+                            <a href="/events" className="hover:underline text-blue-600">Events</a>
+                            <span className="mx-1">/</span>
+                        </li>
+
+                        {/* Current Page */}
+                        <li className="text-gray-500">{event.title}</li>
+
+                    </ol>
+                </nav>
 
                 {/* Event Title + Date + Share */}
                 <h1 className="text-3xl font-bold mt-2">{event.title}</h1>
                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                     {/* Left: Event Date */}
                     <div className="text-gray-500 font-medium">
-                        {(event.startDate || event.endDate) &&
-                            (event.startDate === event.endDate
-                                ? event.startDate
-                                : `${event.startDate || ""} - ${event.endDate || ""}`)}
+                        {event.startDate || event.endDate ? (
+                            event.startDate === event.endDate ? (
+                                formatDate(event.startDate)
+                            ) : (
+                                `${formatDate(event.startDate)} - ${formatDate(event.endDate)}`
+                            )
+                        ) : null}
                     </div>
+
 
                     {/* Right: Share Icons */}
                     <div className="flex items-center gap-3 mt-2 sm:mt-0">
-                         <FiShare2 className="text-gray-500 w-5 h-5" />
+                        <FiShare2 className="text-gray-500 w-5 h-5" />
                         <a
                             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
                             target="_blank"
@@ -120,7 +193,7 @@ export default function NewsAndEventsPage({ event, allEvents }: NewsAndEventsPag
                 />
 
                 {/* Event Description */}
-                <p className="text-gray-700">{event.description}</p>
+                <p className="text-gray-700 text-justify">{event.description}</p>
 
                 {/* Event Additional Images */}
                 {/* {event.images && event.images.length > 0 && (
@@ -129,6 +202,7 @@ export default function NewsAndEventsPage({ event, allEvents }: NewsAndEventsPag
                             <Image
                                 key={idx}
                                 src={img}
+
                                 alt={`${event.title} - ${idx + 1}`}
                                 width={400}
                                 height={200}
@@ -201,18 +275,54 @@ export default function NewsAndEventsPage({ event, allEvents }: NewsAndEventsPag
                                 />
                                 <div className="flex-1">
                                     <p className="font-medium">{e.title}</p>
+
                                     {(e.startDate || e.endDate) && (
                                         <p className="text-sm text-gray-500">
-                                            {e.startDate} {e.endDate && `- ${e.endDate}`}
+                                            {formatDMY(e.startDate)}
+                                            {e.endDate && e.startDate !== e.endDate && ` - ${formatDMY(e.endDate)}`}
                                         </p>
                                     )}
                                 </div>
+
                             </div>
                         ))
                     ) : (
                         <p className="text-gray-500">No events found.</p>
                     )}
                 </div>
+                <h2 className="text-xl font-semibold mt-6">Recent Updates</h2>
+
+                <div className="flex flex-col gap-3">
+                    {recentItems.map((item) => (
+                        <div
+                            key={item.slug}
+                            className="flex items-center gap-3 p-2 border rounded hover:bg-gray-50 cursor-pointer"
+                            onClick={() => router.push(`/events/${item.slug}`)}
+                        >
+                            <Image
+                                src={item.imgSrc}
+                                alt={item.title}
+                                width={60}
+                                height={40}
+                                className="object-cover rounded"
+                            />
+
+                            <div className="flex-1">
+                                <p className="font-semibold">{item.title}</p>
+
+                                {(item.startDate || item.endDate) && (
+                                    <p className="text-sm text-gray-500">
+                                        {formatDMY(item.startDate)}
+                                        {item.endDate &&
+                                            item.startDate !== item.endDate &&
+                                            ` - ${formatDMY(item.endDate)}`}
+                                    </p>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
             </motion.div>
         </div>
     );
